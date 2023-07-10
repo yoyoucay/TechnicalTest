@@ -1,119 +1,51 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {Component} from 'react';
+import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import macbook from './src/images/laptop.jpg';
+import HomeScreen from './src/Pages/HomeScreen';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const App = () => {
+  return <HomeScreen />;
+};
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// const StylingRNComponent = () => {
+//   return (
+//     <View>
+//       <Text style={styles.text}>Kamar Hotel A</Text>
+//       <View
+//         style={{
+//           marginLeft: 10,
+//           marginRight: 10,
+//           padding: 12,
+//           backgroundColor: '#ecf0f1',
+//           width: 198,
+//           height: 200,
+//           borderRadius: 8,
+//         }}>
+//         <Image
+//           source={macbook}
+//           style={{height: 71, width: 174, borderRadius: 8}}
+//         />
+//         <Text style={contentStyle.title}>Queen Room</Text>
+//       </View>
+//     </View>
+//   );
+// };
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+// const styles = StyleSheet.create({
+//   text: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     color: '#8e44ad',
+//     padding: 10,
+//   },
+// });
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Text>Hello World</Text>
-          <Section title="Step Pertama">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="Lihat perubahan mu">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Selanjutnya">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
+// const contentStyle = StyleSheet.create({
+//   title: {
+//     padding: 2,
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     color: '636E72',
+//   },
+// });
 export default App;
