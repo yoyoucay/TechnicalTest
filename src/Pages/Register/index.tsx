@@ -9,13 +9,8 @@ import {
 import React, {useRef, useState} from 'react';
 import {nameApp} from '../../Utils/consVar';
 
-const showValidationAlert = (strMsg, strTitle) =>
+const showValidationAlert = (strMsg: string, strTitle : string) =>
     Alert.alert(strTitle, strMsg, [
-        // {
-        //     text: 'Cancel',
-        //     onPress: () => console.log('Cancel Pressed'),
-        //     style: 'cancel',
-        // },
         {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
 
