@@ -4,13 +4,44 @@ import {
     StyleSheet,
     TextInput,
     TouchableHighlight,
+    Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {nameApp} from '../../Utils/consVar';
+
+const showValidationAlert = (strMsg, strTitle) =>
+    Alert.alert(strTitle, strMsg, [
+        // {
+        //     text: 'Cancel',
+        //     onPress: () => console.log('Cancel Pressed'),
+        //     style: 'cancel',
+        // },
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setpassword] = useState('');
+    const refEmail = useRef(null);
+    const refPassword = useRef(null);
+
+    const submitRegister = () => {
+        if (!email) {
+            showValidationAlert('Please fill email!', 'Email Empty');
+            if (refEmail.current != null) {
+                refEmail.current.focus();
+            }            
+            return;
+        }
+
+        if (!password) {
+            showValidationAlert('Please fill password!', 'Password Empty');
+            if (refPassword.current != null) {
+                refPassword.current.focus();
+            }     
+            return;
+        }
+    };
     return (
         <View style={{flex: 1, paddingTop: 80, backgroundColor: 'blue'}}>
             <View style={stylesHeader.container}>
@@ -21,22 +52,24 @@ const Register = () => {
                     value={email}
                     placeholder="Email"
                     onChangeText={a => setEmail(a)}
+                    ref={refEmail}
                 />
                 <TextInput
                     value={password}
                     placeholder="Password"
                     onChangeText={a => setpassword(a)}
+                    ref={refPassword}
                 />
-                <TouchableHighlight style={{width: '100%'}} onPress={() => []}>
+                <TouchableHighlight
+                    style={{width: '100%'}}
+                    onPress={() => submitRegister()}>
                     <View style={stylesBody.button}>
                         <Text style={stylesBody.textButton}> Register </Text>
                     </View>
                 </TouchableHighlight>
 
-                <View style={[styleFooter.container,{flexDirection:'row'}]}>
-                    <Text style={styleFooter.text}>
-                        Already have account?                        
-                    </Text>
+                <View style={[styleFooter.container, {flexDirection: 'row'}]}>
+                    <Text style={styleFooter.text}>Already have account?</Text>
                     <TouchableHighlight onPress={() => []}>
                         <Text style={styleFooter.textLink}> Sign in</Text>
                     </TouchableHighlight>
@@ -101,12 +134,12 @@ const styleFooter = StyleSheet.create({
     text: {
         fontSize: 10,
         color: 'black',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     textLink: {
         fontSize: 10,
         color: '#3498db',
-        alignItems: 'center'
+        alignItems: 'center',
     },
 });
 export default Register;
