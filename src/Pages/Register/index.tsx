@@ -47,18 +47,37 @@ const callLocalAPI = async (endpoint: any, method = 'GET', body:any = null) => {
 
 const Register = () => {
     let dataUser = {};
+    const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const refFullname = useRef(null);
     const refEmail = useRef(null);
     const refPassword = useRef(null);
-    const submitRegister = () => {
+
+    const submitRegister = async () => {
         const data = {
+            fullname,
             email,
             password,
         };
-        console.log('Data before send : ', data);
+
+        if (!fullname) {
+            showValidationAlert('Mohon untuk mengisi Nama Lengkap!', 'Nama Lengkap kosong');
+            if (refFullname.current != null) {
+                refFullname.current.focus();
+            }            
+            return;
+        }
+
         if (!email) {
-            showValidationAlert('Please fill email!', 'Email Empty');
+            showValidationAlert('Mohon untuk mengisi email!', 'Email kosong');
+            if (refEmail.current != null) {
+                refEmail.current.focus();
+            }            
+            return;
+        }
+        if (!email) {
+            showValidationAlert('Mohon untuk mengisi email!', 'Email kosong');
             if (refEmail.current != null) {
                 refEmail.current.focus();
             }            
@@ -66,23 +85,37 @@ const Register = () => {
         }
 
         if (!password) {
-            showValidationAlert('Please fill password!', 'Password Empty');
+            showValidationAlert('Mohon untuk mengisi password!', 'Password kosong');
             if (refPassword.current != null) {
                 refPassword.current.focus();
             }     
             return;
         }
 
-        dataUser = callLocalAPI('login', 'POST', data);
-
+        dataUser = await callLocalAPI('register', 'POST', data);
         console.log('Data User : ', dataUser);
+
+        if (dataUser.success) {
+            showValidationAlert('Berhasil melakukan Registrasi!', 'Registrasi berhasil');
+            return;
+        }else{
+            showValidationAlert('Registrasi Gagal!, silahkan coba lagi nanti', 'Registrasi gagal');
+            return;
+        }
     };
+
     return (
         <View style={{flex: 1, paddingTop: 80, backgroundColor: 'blue'}}>
             <View style={stylesHeader.container}>
                 <Text style={stylesHeader.text}>{nameApp}</Text>
             </View>
             <View style={stylesBody.container}>
+                <TextInput
+                    value={fullname}
+                    placeholder="Nama Lengkap"
+                    onChangeText={fullname => setFullname(fullname)}
+                    ref={refEmail}
+                />
                 <TextInput
                     value={email}
                     placeholder="Email"
