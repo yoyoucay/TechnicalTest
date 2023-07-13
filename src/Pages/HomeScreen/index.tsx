@@ -1,8 +1,8 @@
-import {View, Text, StyleSheet, TouchableHighlight, Alert} from 'react-native';
+import {View, Text, StyleSheet, TouchableHighlight, Alert, FlatList} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {FlatList} from 'react-native-gesture-handler';
 import {getToken, removeValue} from '../../Utils/AsyncStorage';
+import {callLocalAPI} from '../../Utils/CallLocalAPI';
 
 const showValidationAlert = (strMsg: string, strTitle: string) =>
     Alert.alert(strTitle, strMsg, [
@@ -11,6 +11,7 @@ const showValidationAlert = (strMsg: string, strTitle: string) =>
 
 export default function HomeScreen({navigation}) {
     const [token, setToken] = useState('');
+    const [roomList, setroomList] = useState([]);
 
     // Function __Contruct
     useEffect(() => {
@@ -23,11 +24,26 @@ export default function HomeScreen({navigation}) {
                 );
                 doLogout();
             }
+            const resGetRoomList = await callLocalAPI('room/list', 'GET', null);
+            if (resGetRoomList) {
+                setroomList(resGetRoomList.data);
+                console.log('Berhasil dapat data room list');
+            }else{
+                console.log('Set room list tidak ada data.');
+            }
+            
         }
         checkToken();
     }, []);
 
-    
+    const renderRoomListCard = i => {
+        return (
+            <View style={stylesContainerRooms.container}>
+                <Text>{i.item.name_room}</Text>
+            </View>
+        );
+    };
+
     const doLogout = () => {
         removeValue();
         navigation.reset({
@@ -41,8 +57,7 @@ export default function HomeScreen({navigation}) {
             {/* Container Square */}
             <View style={stylesContainerSquare.container}>
                 <Text style={styles.textTitle}> Room List </Text>
-                {/* Container Rooms */}
-                <View style={stylesContainerRooms.container}></View>
+                <FlatList data={roomList} renderItem={renderRoomListCard} />
             </View>
             {/* Logout Button */}
             <TouchableHighlight

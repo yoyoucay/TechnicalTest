@@ -11,46 +11,12 @@ import {nameApp, UrlAPI} from '../../Utils/consVar';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-navigation';
 import { NavigationContainer } from '@react-navigation/native';
+import { callLocalAPI } from '../../Utils/CallLocalAPI';
 
 const showValidationAlert = (strMsg: string, strTitle: string) =>
     Alert.alert(strTitle, strMsg, [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
-
-const callLocalAPI = async (
-    endpoint: any,
-    method = 'GET',
-    body: any = null,
-) => {
-    try {
-        const apiUrl = UrlAPI; // Replace with your local API URL
-
-        const options = {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        // console.log('BODY JSON RAW : ',body);
-        if (body) {
-            body ? (options.body = JSON.stringify(body)) : null;
-        }
-
-        const response = await fetch(`${apiUrl}/${endpoint}`, options);
-        // console.log('Response ', response);
-        const data = await response.json();
-        // if (!response.ok) {
-        //     console.log('ERROR RESPONSE !!!');
-        //     // throw new Error(data.message);
-
-        // }
-        // console.log('Data JSON Received : ', data);
-        return data;
-    } catch (error) {
-        console.error('Error calling local API:', error);
-        throw error;
-    }
-};
 
 const Register = ({navigation}) => {
     let dataUser = {};
