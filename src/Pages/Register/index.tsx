@@ -8,13 +8,20 @@ import {
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import {nameApp, UrlAPI} from '../../Utils/consVar';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
 
-const showValidationAlert = (strMsg: string, strTitle : string) =>
+const showValidationAlert = (strMsg: string, strTitle: string) =>
     Alert.alert(strTitle, strMsg, [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
 
-const callLocalAPI = async (endpoint: any, method = 'GET', body:any = null) => {
+const callLocalAPI = async (
+    endpoint: any,
+    method = 'GET',
+    body: any = null,
+) => {
     try {
         const apiUrl = UrlAPI; // Replace with your local API URL
 
@@ -26,7 +33,7 @@ const callLocalAPI = async (endpoint: any, method = 'GET', body:any = null) => {
         };
         // console.log('BODY JSON RAW : ',body);
         if (body) {
-            body ? options.body = JSON.stringify(body) : null;
+            body ? (options.body = JSON.stringify(body)) : null;
         }
 
         const response = await fetch(`${apiUrl}/${endpoint}`, options);
@@ -45,7 +52,7 @@ const callLocalAPI = async (endpoint: any, method = 'GET', body:any = null) => {
     }
 };
 
-const Register = () => {
+const Register = ({navigation}) => {
     let dataUser = {};
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
@@ -62,10 +69,13 @@ const Register = () => {
         };
 
         if (!fullname) {
-            showValidationAlert('Mohon untuk mengisi Nama Lengkap!', 'Nama Lengkap kosong');
+            showValidationAlert(
+                'Mohon untuk mengisi Nama Lengkap!',
+                'Nama Lengkap kosong',
+            );
             if (refFullname.current != null) {
                 refFullname.current.focus();
-            }            
+            }
             return;
         }
 
@@ -73,22 +83,25 @@ const Register = () => {
             showValidationAlert('Mohon untuk mengisi email!', 'Email kosong');
             if (refEmail.current != null) {
                 refEmail.current.focus();
-            }            
+            }
             return;
         }
         if (!email) {
             showValidationAlert('Mohon untuk mengisi email!', 'Email kosong');
             if (refEmail.current != null) {
                 refEmail.current.focus();
-            }            
+            }
             return;
         }
 
         if (!password) {
-            showValidationAlert('Mohon untuk mengisi password!', 'Password kosong');
+            showValidationAlert(
+                'Mohon untuk mengisi password!',
+                'Password kosong',
+            );
             if (refPassword.current != null) {
                 refPassword.current.focus();
-            }     
+            }
             return;
         }
 
@@ -96,10 +109,16 @@ const Register = () => {
         console.log('Data User : ', dataUser);
 
         if (dataUser.success) {
-            showValidationAlert('Berhasil melakukan Registrasi!', 'Registrasi berhasil');
+            showValidationAlert(
+                'Berhasil melakukan Registrasi!',
+                'Registrasi berhasil',
+            );
             return;
-        }else{
-            showValidationAlert('Registrasi Gagal!, silahkan coba lagi nanti', 'Registrasi gagal');
+        } else {
+            showValidationAlert(
+                'Registrasi Gagal!, silahkan coba lagi nanti',
+                'Registrasi gagal',
+            );
             return;
         }
     };
@@ -138,10 +157,12 @@ const Register = () => {
 
                 <View style={[styleFooter.container, {flexDirection: 'row'}]}>
                     <Text style={styleFooter.text}>Already have account?</Text>
-                    <TouchableHighlight onPress={() => []}>
+                    <TouchableHighlight onPress={() => navigation.navigate('Login')}>
                         <Text style={styleFooter.textLink}> Sign in</Text>
                     </TouchableHighlight>
                 </View>
+
+                {/* <ExampleStackNavigator /> */}
             </View>
         </View>
     );
