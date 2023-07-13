@@ -110,10 +110,10 @@ const Register = ({navigation}) => {
 
         if (dataUser.success) {
             showValidationAlert(
-                'Berhasil melakukan Registrasi!',
+                'Berhasil melakukan Registrasi! Silahkan login terlebih dahulu.',
                 'Registrasi berhasil',
             );
-            return;
+            return navigation.navigate('Login');
         } else {
             showValidationAlert(
                 'Registrasi Gagal!, silahkan coba lagi nanti',
@@ -157,7 +157,7 @@ const Register = ({navigation}) => {
 
                 <View style={[styleFooter.container, {flexDirection: 'row'}]}>
                     <Text style={styleFooter.text}>Already have account?</Text>
-                    <TouchableHighlight onPress={() => navigation.navigate('Login')}>
+                    <TouchableHighlight onPress={() => navigation.goBack()}>
                         <Text style={styleFooter.textLink}> Sign in</Text>
                     </TouchableHighlight>
                 </View>
