@@ -1,8 +1,18 @@
-import {View, Text, StyleSheet, TouchableHighlight, Alert, FlatList} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Alert,
+    FlatList,
+    TouchableOpacity,
+    Image,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {getToken, removeValue} from '../../Utils/AsyncStorage';
 import {callLocalAPI} from '../../Utils/CallLocalAPI';
+import { addThousandSeparator } from '../../Utils/ThousandSeparator';
+import CircleFloatButton from '../../CircleButton';
 
 const showValidationAlert = (strMsg: string, strTitle: string) =>
     Alert.alert(strTitle, strMsg, [
@@ -10,7 +20,6 @@ const showValidationAlert = (strMsg: string, strTitle: string) =>
     ]);
 
 export default function HomeScreen({navigation}) {
-    const [token, setToken] = useState('');
     const [roomList, setroomList] = useState([]);
 
     // Function __Contruct
@@ -28,10 +37,9 @@ export default function HomeScreen({navigation}) {
             if (resGetRoomList) {
                 setroomList(resGetRoomList.data);
                 console.log('Berhasil dapat data room list');
-            }else{
+            } else {
                 console.log('Set room list tidak ada data.');
             }
-            
         }
         checkToken();
     }, []);
@@ -39,7 +47,27 @@ export default function HomeScreen({navigation}) {
     const renderRoomListCard = i => {
         return (
             <View style={stylesContainerRooms.container}>
-                <Text>{i.item.name_room}</Text>
+                <View style={[                    
+                    {flexDirection: 'row'},
+                ]}>
+                    <Text style={[stylesContainerRooms.textItems, {paddingRight: 120}]}>
+                        {i.item.name_room} Room
+                    </Text>
+                    <TouchableOpacity
+                        style={stylesContainerRooms.buttonClose}>
+                        <Text style={stylesContainerRooms.buttonCloseContent}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={stylesContainerRooms.buttonClose}>
+                        <Text style={stylesContainerRooms.buttonCloseContent}>Remove</Text>
+                    </TouchableOpacity>
+                </View>
+                <Image source={{uri:i.item.urlToImage, width: 100, height: 100}} />
+                <View style={stylesContainerRooms.containerText}>
+                    <Text style={{ color: '#c7ecee'}}>Price : Rp. {addThousandSeparator(parseFloat(i.item.price))}</Text>
+                    <Text style={{ color: '#c7ecee'}}>Max Person : {i.item.maxperson}</Text>
+                    <Text style={{ color: '#c7ecee'}}>Available Room : {i.item.stock}</Text>
+                </View>
             </View>
         );
     };
@@ -56,17 +84,21 @@ export default function HomeScreen({navigation}) {
         <SafeAreaView style={styles.container}>
             {/* Container Square */}
             <View style={stylesContainerSquare.container}>
-                <Text style={styles.textTitle}> Room List </Text>
+                <View style={{flexDirection: 'row'}}>                    
+                    <Text style={styles.textTitle}> Room List </Text>
+                    {/* Logout Button */}
+                    <TouchableOpacity
+                        style={{width: '100%'}}
+                        onPress={() => doLogout()}>
+                        <View style={styles.button}>
+                            <Text style={styles.textButton}> Logout </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
                 <FlatList data={roomList} renderItem={renderRoomListCard} />
             </View>
-            {/* Logout Button */}
-            <TouchableHighlight
-                style={{width: '100%'}}
-                onPress={() => doLogout()}>
-                <View style={styles.button}>
-                    <Text style={styles.textButton}> Logout </Text>
-                </View>
-            </TouchableHighlight>
+            
+            <CircleFloatButton />
         </SafeAreaView>
     );
 }
@@ -84,8 +116,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
-        backgroundColor: '#ecf0f1',
-        padding: 10,
+        marginLeft: 120,
+        backgroundColor: '#e74c3c',
+        padding: 8,
+        width: 100,
         borderRadius: 4,
         alignItems: 'center',
     },
@@ -104,11 +138,40 @@ const stylesContainerSquare = StyleSheet.create({
 
 const stylesContainerRooms = StyleSheet.create({
     container: {
+        flex: 1,
         padding: 20,
         backgroundColor: '#e74c3c',
         borderRadius: 8,
         width: 360,
-        height: 300,
-        alignContent: 'center',
+        // height: 300,
+        alignContent: 'flex-end',        
+        // justifyContent: 'center',   
     },
+    containerHeader:{
+        justifyContent: 'center', 
+    },
+    containerText:{
+        marginTop: 10,
+        padding: 5,
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    textItems: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#c7ecee',
+    },
+    buttonClose: {
+        height: 25,
+        borderRadius: 8,
+        backgroundColor: '#e53935',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin:5     
+    },
+    buttonCloseContent: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    }
 });
