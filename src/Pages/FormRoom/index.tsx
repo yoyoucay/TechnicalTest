@@ -11,7 +11,7 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import React, {useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { callLocalAPI } from '../../Utils/CallLocalAPI';
+import { UploadFileAPI, UploadFileAPIAxios, callLocalAPI } from '../../Utils/CallLocalAPI';
 import { storeToken } from '../../Utils/AsyncStorage';
 
 
@@ -54,6 +54,8 @@ const FormRoom = ({navigation}) => {
             return;
         }
 
+        console.log('Obj FILE : ', file);
+
         let dataRoom = {
             name_room: nameRoom,
             maxperson: maxPerson,
@@ -61,10 +63,12 @@ const FormRoom = ({navigation}) => {
             stock: stockRoom,
             file: file,
         };
+        
         // Perform form submission logic here
         console.log('DATA FOR SEND CREATE ROOM :', dataRoom);
 
-        dataRoom = await callLocalAPI('room/create', 'POST', dataRoom);
+        dataRoom = await UploadFileAPI('room/create', 'POST', dataRoom);
+        
         console.log('Data User : ', dataRoom);
 
         if (dataRoom.success) {
@@ -72,14 +76,14 @@ const FormRoom = ({navigation}) => {
                 'Berhasil melakukan pendaftaran Room!',
                 'Berhasil',
             );
-            console.log(dataUser.data.api_token);
-            await storeToken(dataUser.data.api_token);
+            console.log(dataRoom.data.api_token);
             return navigation.goBack();
         } else {
             showValidationAlert(
                 'Pendaftaran Room gagal!, silahkan hubungi tim teknis terkait hal ini',
                 'Gagal',
             );
+            console.log('FAIL UPLOAD :', dataRoom);
             return;
         }        
     };  
@@ -101,7 +105,7 @@ const FormRoom = ({navigation}) => {
 
     const pickImage = () => {
         launchImageLibrary({mediaType: 'photo'}, response => {
-            console.log(response.assets[0].uri);
+            console.log(response.assets[0]);
             if (!response.didCancel && !response.error) {
                 setfile(response.assets[0]);
             } else {
@@ -115,7 +119,7 @@ const FormRoom = ({navigation}) => {
             <View>
                 {/*  */}
                 <View style={{flexDirection: 'row', alignItems:'center'}}>
-                    <Text>Room Name : </Text><TextInput
+                    <Text>Room Name : {file?.size}</Text><TextInput
                         value={nameRoom}
                         onChangeText={setnameRoom}
                         placeholder="Please input room name..."

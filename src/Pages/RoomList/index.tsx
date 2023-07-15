@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Image,
+    Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {addThousandSeparator} from '../../Utils/ThousandSeparator';
@@ -26,6 +27,16 @@ export default function RoomList() {
         getData();
     }, []);
 
+    const handleRefreshData =async () => {
+        const res = await getRoomList();
+        if (res) {
+            setroomList(res.data);
+            console.log('Berhasil dapat data room list');
+        } else {
+            console.log('Set room list tidak ada data.');
+        }
+    };
+
     const getRoomList = async () => {
         try {
             const resGetRoomList = await callLocalAPI('room/list', 'GET', null);
@@ -37,6 +48,36 @@ export default function RoomList() {
         }
     };
 
+    const removeRoom = async (idRoom : string) => {
+        console.log('removeRoom Pressed. ID ROOM : ', idRoom);
+        
+        try {
+            const data = {
+                id_room: idRoom
+            };
+            const resRemoveList = await callLocalAPI('room/remove', 'POST', data);
+            console.log(resRemoveList);
+
+            await handleRefreshData();
+
+            return;
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+    };
+
+    const showConfirmAlert = (strMsg: string, strTitle: string, id:string) =>
+        Alert.alert(strTitle, strMsg, [
+            {text: 'OK', onPress: () => removeRoom(id)},
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+        ]);
+    
+
     const renderRoomListCard = i => {
         return (
             <View style={stylesContainerRooms.container}>
@@ -46,14 +87,14 @@ export default function RoomList() {
                             stylesContainerRooms.textItems,
                             {paddingRight: 120},
                         ]}>
-                        {i.item.name_room} Room
+                        {i.item.name_room} Room 
                     </Text>
                     <TouchableOpacity style={stylesContainerRooms.buttonClose}>
                         <Text style={stylesContainerRooms.buttonCloseContent}>
                             Edit
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={stylesContainerRooms.buttonClose}>
+                    <TouchableOpacity style={stylesContainerRooms.buttonClose} onPress={() => showConfirmAlert('Apakah kamu yakin ingin menghapus Room ini?', 'Hapus Room',i.item.id)}>
                         <Text style={stylesContainerRooms.buttonCloseContent}>
                             Remove
                         </Text>
@@ -80,7 +121,7 @@ export default function RoomList() {
 
     return (
         <View style={stylesContainerSquare.container}>
-            <FlatList data={roomList} renderItem={renderRoomListCard} />
+            <FlatList data={roomList} renderItem={renderRoomListCard} onRefresh={handleRefreshData} refreshing={false}/>
         </View>
     );
 }
@@ -106,6 +147,7 @@ const stylesContainerRooms = StyleSheet.create({
         // height: 300,
         alignContent: 'flex-end',
         // justifyContent: 'center',
+        marginVertical: 10
     },
     containerHeader: {
         justifyContent: 'center',
