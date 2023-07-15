@@ -12,9 +12,21 @@ const App = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Login" options={{headerShown: false}} component={Login} />
-                <Stack.Screen name="Register" options={{headerShown: false}} component={Register} />
-                <Stack.Screen name="HomeScreen" options={{headerShown: false}} component={HomeScreen} />
+                <Stack.Screen
+                    name="Login"
+                    options={{headerShown: false}}
+                    component={Login}
+                />
+                <Stack.Screen
+                    name="Register"
+                    options={{headerShown: false}}
+                    component={Register}
+                />
+                <Stack.Screen
+                    name="HomeScreen"
+                    options={{headerShown: false}}
+                    component={HomeScreen}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

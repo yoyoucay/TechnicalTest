@@ -22,7 +22,7 @@ export const getToken = async () => {
     }
 };
 
-export const removeValue = async () => {
+export const removeToken = async () => {
     try {
         await AsyncStorage.removeItem('tokenAPI');
     } catch (e) {
