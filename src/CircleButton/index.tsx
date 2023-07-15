@@ -1,10 +1,12 @@
 import React from 'react';
 import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 
-const CircleFloatButton = () => {
+const CircleFloatButton = ({onPress}) => {
+    
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={onPress}>
                 <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>+</Text>
             </TouchableOpacity>
         </View>

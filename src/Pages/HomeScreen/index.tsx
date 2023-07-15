@@ -10,7 +10,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CircleFloatButton from '../../CircleButton';
 import RoomList from '../RoomList';
 import { getToken, removeToken } from '../../Utils/AsyncStorage';
-import { callLocalAPI } from '../../Utils/CallLocalAPI';
 
 export default function HomeScreen({navigation}) {
 
@@ -62,7 +61,7 @@ export default function HomeScreen({navigation}) {
                 </TouchableOpacity>
             </View>       
             <RoomList />
-            <CircleFloatButton />
+            <CircleFloatButton onPress={() => navigation.navigate('FormRoom')} />
         </SafeAreaView>
     );
 }

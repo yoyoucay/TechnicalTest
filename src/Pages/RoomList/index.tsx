@@ -85,29 +85,6 @@ export default function RoomList() {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {padding: 20, flex: 1, alignItems: 'center'},
-    textTitle: {
-        textAlign: 'center',
-        fontSize: 24,
-        fontWeight: 'bold',
-        padding: 5,
-        marginBottom: 10,
-    },
-    textButton: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    button: {
-        marginLeft: 120,
-        backgroundColor: '#e74c3c',
-        padding: 8,
-        width: 100,
-        borderRadius: 4,
-        alignItems: 'center',
-    },
-});
-
 const stylesContainerSquare = StyleSheet.create({
     container: {
         padding: 20,
@@ -159,6 +136,4 @@ const stylesContainerRooms = StyleSheet.create({
     },
 });
 
-function showValidationAlert(arg0: string, arg1: string) {
-    throw new Error('Function not implemented.');
-}
+
